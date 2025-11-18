@@ -1,33 +1,35 @@
-Shader "Custom/ToonUnity6_URP"
+Shader "URP/ToonShaderURP"
 {
     Properties
     {
-        _MainTex ("Texture", 2D) = "white" {}
-        _BaseColor ("Base Color", Color) = (1,1,1,1)
-        _Steps ("Toon Steps", Range(1,5)) = 3
-        _OutlineColor ("Outline Color", Color) = (0,0,0,1)
-        _OutlineSize ("Outline Size", Range(0,0.05)) = 0.02
+        _MainColor ("Color Principal", Color) = (1,1,1,1)
+        _ShadowColor ("Color de Sombra", Color) = (0.2,0.2,0.2,1)
+        _Shades ("Niveles de Sombra", Range(1,5)) = 3
+
+        _OutlineColor ("Color Contorno", Color) = (0,0,0,1)
+        _OutlineSize ("Grosor Contorno", Range(0,0.1)) = 0.03
     }
 
     SubShader
     {
         Tags { "RenderType"="Opaque" "Queue"="Geometry" }
 
-        // OUTLINE ------------------------------------------
+        // -----------------------------
+        // OUTLINE PASS
+        // -----------------------------
         Pass
         {
             Name "Outline"
             Cull Front
-            Tags { "LightMode"="UniversalForward" }
 
             HLSLPROGRAM
             #pragma vertex vert
             #pragma fragment frag
-
+            
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
 
-            float _OutlineSize;
             float4 _OutlineColor;
+            float _OutlineSize;
 
             struct Attributes
             {
@@ -40,7 +42,7 @@ Shader "Custom/ToonUnity6_URP"
                 float4 positionHCS : SV_POSITION;
             };
 
-            Varyings vert(Attributes v)
+            Varyings vert (Attributes v)
             {
                 Varyings o;
 
@@ -57,74 +59,70 @@ Shader "Custom/ToonUnity6_URP"
             {
                 return _OutlineColor;
             }
+
             ENDHLSL
         }
 
-        // MAIN TOON PASS ------------------------------------
+        // -----------------------------
+        // TOON PASS (URP LIGHTING)
+        // -----------------------------
         Pass
         {
-            Name "ForwardLit"
+            Name "Toon"
             Tags { "LightMode"="UniversalForward" }
 
             HLSLPROGRAM
             #pragma vertex vert
             #pragma fragment frag
-
+            
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
 
-            TEXTURE2D(_MainTex);
-            SAMPLER(sampler_MainTex);
-            float4 _MainTex_ST;
-
-            float4 _BaseColor;
-            float _Steps;
+            float4 _MainColor;
+            float4 _ShadowColor;
+            float _Shades;
 
             struct Attributes
             {
                 float4 positionOS : POSITION;
-                float3 normalOS   : NORMAL;
-                float2 uv         : TEXCOORD0;
+                float3 normalOS : NORMAL;
             };
 
             struct Varyings
             {
                 float4 positionHCS : SV_POSITION;
-                float2 uv          : TEXCOORD0;
-                float3 normalWS    : TEXCOORD1;
-                float3 posWS       : TEXCOORD2;
+                float3 normalWS : TEXCOORD0;
+                float3 posWS : TEXCOORD1;
             };
 
             Varyings vert(Attributes v)
             {
                 Varyings o;
-
                 o.positionHCS = TransformObjectToHClip(v.positionOS);
-
-                // CORRECCIÓN: Transformación de UV manual
-                o.uv = v.uv * _MainTex_ST.xy + _MainTex_ST.zw;
-
                 o.normalWS = normalize(TransformObjectToWorldNormal(v.normalOS));
                 o.posWS = TransformObjectToWorld(v.positionOS).xyz;
-
                 return o;
             }
 
             half4 frag(Varyings i) : SV_Target
             {
-                float3 N = normalize(i.normalWS);
-
+                // Luz principal URP
                 Light mainLight = GetMainLight();
                 float3 L = normalize(mainLight.direction);
 
-                float NdotL = max(0, dot(N, -L)); // URP luz invertida
+                float NdotL = saturate(dot(normalize(i.normalWS), L));
 
-                float toon = floor(NdotL * _Steps) / _Steps;
+                // Toon steps
+                float toon = floor(NdotL * _Shades) / _Shades;
 
-                float4 tex = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv) * _BaseColor;
+                float3 col = lerp(_ShadowColor.rgb, _MainColor.rgb, toon);
 
-                return float4(tex.rgb * toon * mainLight.color.rgb, tex.a);
+                // Multiplicar por color de luz correcta URP
+                col *= mainLight.color;
+
+                return half4(col, 1);
             }
+
             ENDHLSL
         }
     }

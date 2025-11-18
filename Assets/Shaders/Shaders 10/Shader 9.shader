@@ -1,4 +1,4 @@
-Shader "Custom/Toon_MultiTexture_Mask"
+Shader "Custom/Toon_MultiTexture_Mask_URP"
 {
     Properties
     {
@@ -18,7 +18,7 @@ Shader "Custom/Toon_MultiTexture_Mask"
 
     SubShader
     {
-        Tags { "RenderType" = "Opaque" }
+        Tags { "RenderPipeline"="UniversalPipeline" "RenderType"="Opaque" }
 
         // ---------------------------------------------------------
         // ---------------------- OUTLINE PASS ---------------------
@@ -26,11 +26,14 @@ Shader "Custom/Toon_MultiTexture_Mask"
         Pass
         {
             Name "Outline"
+            Tags { "LightMode"="SRPDefaultUnlit" }
             Cull Front
 
-            CGPROGRAM
+            HLSLPROGRAM
             #pragma vertex vert
             #pragma fragment frag
+
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
 
             float _OutlineSize;
             float4 _OutlineColor;
@@ -50,8 +53,11 @@ Shader "Custom/Toon_MultiTexture_Mask"
             {
                 v2f o;
                 float3 N = normalize(v.normal);
+
+                // Expandir la malla para el borde
                 v.vertex.xyz += N * _OutlineSize;
-                o.pos = UnityObjectToClipPos(v.vertex);
+
+                o.pos = TransformObjectToHClip(v.vertex);
                 return o;
             }
 
@@ -59,7 +65,8 @@ Shader "Custom/Toon_MultiTexture_Mask"
             {
                 return _OutlineColor;
             }
-            ENDCG
+
+            ENDHLSL
         }
 
         // ---------------------------------------------------------
@@ -67,21 +74,26 @@ Shader "Custom/Toon_MultiTexture_Mask"
         // ---------------------------------------------------------
         Pass
         {
-            Tags { "LightMode" = "ForwardBase" }
+            Name "ToonLit"
+            Tags { "LightMode"="UniversalForward" }
 
-            CGPROGRAM
+            HLSLPROGRAM
             #pragma vertex vert
             #pragma fragment frag
-            #include "UnityCG.cginc"
 
-            // MULTITEXTURA
-            sampler2D _MainTex;
-            sampler2D _Tex2;
-            sampler2D _MaskTex;
+            // URP Includes
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
+
+            // TEXTURAS
+            TEXTURE2D(_MainTex);   SAMPLER(sampler_MainTex);
+            TEXTURE2D(_Tex2);      SAMPLER(sampler_Tex2);
+            TEXTURE2D(_MaskTex);   SAMPLER(sampler_MaskTex);
+
             float4 _MainTex_ST;
             float4 _Color;
 
-            // TOON
+            // Toon
             float _Steps;
 
             struct appdata
@@ -95,20 +107,19 @@ Shader "Custom/Toon_MultiTexture_Mask"
             {
                 float4 pos : SV_POSITION;
                 float2 uv : TEXCOORD0;
-                float3 normalWorld : TEXCOORD1;
-                float3 worldPos : TEXCOORD2;
+                float3 normalWS : TEXCOORD1;
+                float3 posWS : TEXCOORD2;
             };
 
             v2f vert(appdata v)
             {
                 v2f o;
 
-                o.pos = UnityObjectToClipPos(v.vertex);
+                o.pos = TransformObjectToHClip(v.vertex);
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
 
-                o.normalWorld = normalize(mul((float3x3)unity_ObjectToWorld, v.normal));
-
-                o.worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
+                o.normalWS = TransformObjectToWorldNormal(v.normal);
+                o.posWS = TransformObjectToWorld(v.vertex).xyz;
 
                 return o;
             }
@@ -116,22 +127,28 @@ Shader "Custom/Toon_MultiTexture_Mask"
             float4 frag(v2f i) : SV_Target
             {
                 // ---------------- MULTITEXTURA ----------------
-                float4 tex1 = tex2D(_MainTex, i.uv);
-                float4 tex2 = tex2D(_Tex2, i.uv);
-                float mask = tex2D(_MaskTex, i.uv).r;
+                float4 tex1 = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
+                float4 tex2 = SAMPLE_TEXTURE2D(_Tex2, sampler_Tex2, i.uv);
+                float mask  = SAMPLE_TEXTURE2D(_MaskTex, sampler_MaskTex, i.uv).r;
 
                 float4 mixedTex = lerp(tex1, tex2, mask) * _Color;
 
-                // ------------------ TOON -----------------------
-                float3 N = normalize(i.normalWorld);
-                float3 L = normalize(UnityWorldSpaceLightDir(i.worldPos));
+                // ------------------ ILUMINACIÓN URP ------------------
+                Light mainLight = GetMainLight();
+                float3 L = normalize(mainLight.direction);
+
+                float3 N = normalize(i.normalWS);
                 float NdotL = max(0, dot(N, L));
 
-                float toonStep = floor(NdotL * _Steps) / _Steps;
+                // ------------------ TOON -----------------------
+                float toon = floor(NdotL * _Steps) / _Steps;
 
-                return float4(mixedTex.rgb * toonStep, mixedTex.a);
+                float3 finalColor = mixedTex.rgb * toon * mainLight.color;
+
+                return float4(finalColor, mixedTex.a);
             }
-            ENDCG
+
+            ENDHLSL
         }
     }
 }
