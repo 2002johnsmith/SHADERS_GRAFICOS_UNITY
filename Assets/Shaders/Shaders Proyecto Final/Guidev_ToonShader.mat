@@ -51,7 +51,7 @@ Material:
     - _OutlineSize: 0.0451
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _Shades: 2.29
+    - _Shades: 4.49
     - _Speed: 1
     - _Threshold: 0.5
     m_Colors:
@@ -60,10 +60,10 @@ Material:
     - _InkColor: {r: 0.754717, g: 0.5660378, b: 0.5660378, a: 0}
     - _LightColor: {r: 1, g: 1, b: 1, a: 1}
     - _LightDir: {r: 0.5, g: 0.5, b: 0, a: 0}
-    - _MainColor: {r: 0.6, g: 0.6, b: 0.6, a: 1}
-    - _OutlineColor: {r: 0.31897122, g: 0, b: 0.8679245, a: 1}
+    - _MainColor: {r: 0.5345911, g: 0.2639333, b: 0.2639333, a: 1}
+    - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
     - _ScrollDir: {r: 1, g: 0, b: 0, a: 0}
-    - _ShadowColor: {r: 0.29999998, g: 0.29999998, b: 0.29999998, a: 1}
+    - _ShadowColor: {r: 0.44181398, g: 0.5359211, b: 0.5597484, a: 1}
     - _baseColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
