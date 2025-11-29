@@ -38,12 +38,12 @@ Material:
     m_Ints: []
     m_Floats:
     - _BaseEmissionStrength: 0
-    - _BlueThreshold: 0.953
-    - _EmissionStrength: 10
+    - _BlueThreshold: 0.902
+    - _EmissionStrength: 5.77
     - _ReplacementEmissionStrength: 4.07
     m_Colors:
     - _BaseEmissionColor: {r: 0, g: 1, b: 1, a: 1}
-    - _EmissionColor: {r: 0, g: 0.41557527, b: 0.4433962, a: 1}
+    - _EmissionColor: {r: 0.44313726, g: 0.3156777, b: 0, a: 1}
     - _ReplacementColor: {r: 0, g: 0.9375248, b: 1, a: 1}
     - _ReplacementEmissionColor: {r: 0, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
