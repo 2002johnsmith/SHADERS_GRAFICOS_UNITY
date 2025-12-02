@@ -30,9 +30,19 @@ Material:
     m_Ints: []
     m_Floats:
     - _DrawEffect: 0
-    - _EffectStrength: 0
-    - _ScaleX: 0.56
-    - _ScaleY: 0.53
-    m_Colors: []
+    - _EffectStrength: 0.524
+    - _Metallic: 0.408
+    - _PastoIntensity: 0
+    - _RockIntensity: 0.098
+    - _Scale: 1
+    - _ScaleX: 1.64
+    - _ScaleY: 2.2
+    - _Smoothness: 0.459
+    - _TilingX: 1
+    - _TilingY: 1
+    m_Colors:
+    - _BaseColor: {r: 0.3962264, g: 0.08348159, b: 0.18885508, a: 1}
+    - _EmissionColor: {r: 0.56241524, g: 1, b: 0, a: 1}
+    - _RockColor: {r: 0.6, g: 0.6, b: 0.6, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
