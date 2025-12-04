@@ -47,7 +47,7 @@ Material:
     m_Colors:
     - _BaseCOLOR: {r: 0.17942896, g: 0.003921565, b: 0.21568628, a: 0}
     - _BotonColor: {r: 1, g: 0, b: 0.11764717, a: 0}
-    - _TopColor: {r: 0, g: 8.889259, b: 191.74902, a: 0}
+    - _TopColor: {r: 0, g: 35.557037, b: 766.9961, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
 --- !u!114 &6775152899091557769
