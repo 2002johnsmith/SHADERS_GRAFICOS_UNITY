@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Crystal Shader
+  m_Name: Crystal Shader 2
   m_Shader: {fileID: -6465566751694194690, guid: 41119deb65595a64a8bdd321447c5829, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -38,16 +38,16 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _BotonLine: 0
-    - _Metallic: 1
+    - _BotonLine: 0.7
+    - _Metallic: 0.5
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _Smothness: 0.6
-    - _TopLine: 0.75
+    - _Smothness: 0.5
+    - _TopLine: 0.7
     m_Colors:
-    - _BaseCOLOR: {r: 0.07726598, g: 0.0030704818, b: 0.21698111, a: 0}
-    - _BotonColor: {r: 1, g: 0, b: 0.119571686, a: 0}
-    - _TopColor: {r: 11.984313, g: 9.662745, b: 0, a: 0}
+    - _BaseCOLOR: {r: 1.1206975, g: 0.358567, b: 0, a: 0}
+    - _BotonColor: {r: 0.0007314645, g: 0.00023571208, b: 0, a: 0}
+    - _TopColor: {r: 0.6820753, g: 44.727043, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
 --- !u!114 &6775152899091557769
