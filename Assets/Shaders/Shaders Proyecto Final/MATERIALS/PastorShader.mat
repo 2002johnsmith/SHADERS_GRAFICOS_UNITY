@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: PastorShader
+  m_Shader: {fileID: 4800000, guid: 2bca71027fdf01e48a010f40c894b055, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: 6f9976806ab982743bcef333b6e50060, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _DrawEffect: 0
+    - _EffectStrength: 0.524
+    - _Metallic: 0.408
+    - _PastoIntensity: 0
+    - _RockIntensity: 0.098
+    - _Scale: 1
+    - _ScaleX: 1.64
+    - _ScaleY: 2.2
+    - _Smoothness: 0.459
+    - _TilingX: 1
+    - _TilingY: 1
+    m_Colors:
+    - _BaseColor: {r: 0.3962264, g: 0.08348159, b: 0.18885508, a: 1}
+    - _EmissionColor: {r: 0.56241524, g: 1, b: 0, a: 1}
+    - _RockColor: {r: 0.6, g: 0.6, b: 0.6, a: 1}
+  m_BuildTextureStacks: []
+  m_AllowLocking: 1
