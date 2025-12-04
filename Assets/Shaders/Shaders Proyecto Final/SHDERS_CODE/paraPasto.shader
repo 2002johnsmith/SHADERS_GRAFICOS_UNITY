@@ -1,10 +1,12 @@
-Shader "URP/DibujoCartoon_Fixed"
+Shader "URP/DibujoCartoon_Abstracto"
 {
     Properties
     {
         _MainTex("Texture", 2D) = "white" {}
         _Posterize("Posterize Levels", Range(2, 20)) = 6
         _EdgeThreshold("Edge Threshold", Range(0.01, 1)) = 0.2
+        _NoiseAmount("Noise Amount", Range(0.0, 1.0)) = 0.1
+        _Saturation("Saturation", Range(0.0, 2.0)) = 1.0
     }
 
     SubShader
@@ -41,13 +43,27 @@ Shader "URP/DibujoCartoon_Fixed"
 
             sampler2D _MainTex;
             float4 _MainTex_ST;
-
             float _Posterize;
             float _EdgeThreshold;
+            float _NoiseAmount;
+            float _Saturation;
 
             float3 Posterize(float3 c, float lv)
             {
                 return floor(c * lv) / lv;
+            }
+
+            // Reemplazar fract con una operación equivalente en HLSL
+            float fract(float x)
+            {
+                return x - floor(x);
+            }
+
+            // Functión para agregar ruido a la textura (simula un efecto de pincel)
+            float3 AddNoise(float2 uv, float amount)
+            {
+                float noise = fract(sin(dot(uv, float2(12.9898, 78.233))) * 43758.5453);
+                return float3(noise * amount, noise * amount, noise * amount);
             }
 
             Varyings vert(Attributes IN)
@@ -77,15 +93,30 @@ Shader "URP/DibujoCartoon_Fixed"
                 return length(gx + gy);
             }
 
+            // Función para ajustar la saturación de los colores
+            float3 AdjustSaturation(float3 color, float saturation)
+            {
+                float grey = dot(color, float3(0.299, 0.587, 0.114));
+                return lerp(float3(grey, grey, grey), color, saturation);
+            }
+
             float4 frag(Varyings IN) : SV_Target
             {
                 float4 col = tex2D(_MainTex, IN.uv);
 
+                // Aplicar posterización
                 col.rgb = Posterize(col.rgb, _Posterize);
 
+                // Ajustar saturación
+                col.rgb = AdjustSaturation(col.rgb, _Saturation);
+
+                // Añadir ruido
+                col.rgb += AddNoise(IN.uv, _NoiseAmount);
+
+                // Aplicar bordes
                 float edge = SobelEdge(IN.uv);
                 if (edge > _EdgeThreshold)
-                    col.rgb = 0;
+                    col.rgb = float3(0, 0, 0); // Negro en los bordes
 
                 return col;
             }
