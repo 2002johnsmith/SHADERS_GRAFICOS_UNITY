@@ -40,8 +40,8 @@ Material:
     m_Floats:
     - _AlphaClip: 0.4
     - _CloudAlpha: 2.69
-    - _CloudPower: 0.9
-    - _CloudScale: 1.24
+    - _CloudPower: 0.6
+    - _CloudScale: 3.74
     - _DistorScale: 60
     - _QueueControl: 0
     - _QueueOffset: 0
