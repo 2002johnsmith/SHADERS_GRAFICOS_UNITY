@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: SkyBox Shader Graph
+  m_Name: Shader Graphs_SkyBox Shader Graph
   m_Shader: {fileID: -6465566751694194690, guid: aa0a72390cf5b824790239bd8de44684, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -35,16 +35,16 @@ Material:
     m_Floats:
     - _BUILTIN_QueueControl: 0
     - _BUILTIN_QueueOffset: 0
-    - _HorizonBlend: 30
-    - _NadirBlend: 1
-    - _ZenihtBlend: 1
+    - _HorizonBlend: 25.2
+    - _NadirBlend: 11.1
+    - _ZenihtBlend: 4.7
     m_Colors:
-    - _GroundColor: {r: 0.5019608, g: 0.25772753, b: 0, a: 0}
-    - _HorizonColor: {r: 1, g: 1, b: 1, a: 0}
-    - _SkyColor: {r: 0.038581353, g: 0.4811321, b: 0.39018965, a: 0}
+    - _GroundColor: {r: 0.46668044, g: 0.7924528, b: 0.4448202, a: 0}
+    - _HorizonColor: {r: 0.8301887, g: 0.090067655, b: 0.4601282, a: 0}
+    - _SkyColor: {r: 0.74509805, g: 0.477026, b: 0.13725491, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
---- !u!114 &7783055111251737533
+--- !u!114 &2590826178822781636
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
